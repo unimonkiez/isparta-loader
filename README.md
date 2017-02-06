@@ -58,6 +58,8 @@ This file will be the only entry point for Karma:
 #### karma.conf.js
 
 ```js
+var babelPresets = ['es2015', 'stage-0', 'react'];
+
 config.set({
     …
     files: [
@@ -67,19 +69,6 @@ config.set({
         'test/index.js': 'webpack'
     },
     webpack: {
-        // *optional* babel options: isparta will use it as well as babel-loader
-        babel: {
-            presets: ['es2015', 'stage-0', 'react']
-        },
-        // *optional* isparta options: istanbul behind isparta will use it
-        isparta: {
-            embedSource: true,
-            noAutoWrap: true,
-            // these babel options will be passed only to isparta and not to babel-loader
-            babel: {
-                presets: ['es2015', 'stage-0', 'react']
-            }
-        },
         …
         module: {
             preLoaders: [
@@ -90,13 +79,23 @@ config.set({
                         path.resolve('src/components/'),
                         path.resolve('node_modules/')
                     ],
-                    loader: 'babel'
+                    loader: 'babel',
+                    query: babelPresets
                 },
                 // transpile and instrument only testing sources with isparta
                 {
                     test: /\.js$/,
                     include: path.resolve('src/components/'),
-                    loader: 'isparta'
+                    loader: 'isparta',
+                    // *optional* isparta options: istanbul behind isparta will use it
+                    query: {
+                        embedSource: true,
+                        noAutoWrap: true,
+                        // these babel options will be passed only to isparta and not to babel-loader
+                        babel: {
+                            presets: babelPresets
+                        }
+                    }
                 }
             ]
         }

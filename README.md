@@ -71,22 +71,24 @@ config.set({
     webpack: {
         …
         module: {
-            preLoaders: [
+            loaders: [
                 // transpile all files except testing sources with babel as usual
                 {
                     test: /\.js$/,
+                    enforce: 'pre,
                     exclude: [
                         path.resolve('src/components/'),
                         path.resolve('node_modules/')
                     ],
-                    loader: 'babel',
+                    loader: 'babel-loader',
                     query: babelPresets
                 },
                 // transpile and instrument only testing sources with isparta
                 {
                     test: /\.js$/,
+                    enforce: 'pre,
                     include: path.resolve('src/components/'),
-                    loader: 'isparta',
+                    loader: 'isparta-loader',
                     // *optional* isparta options: istanbul behind isparta will use it
                     query: {
                         embedSource: true,
